@@ -100,9 +100,10 @@
     // Entry Video Splash
     entryVideoSplash: document.getElementById('entryVideoSplash'),
     splashVideo: document.getElementById('splashVideo'),
-    btnSplashCenterTap: document.getElementById('btnSplashCenterTap'),
-    splashPlayIcon: document.getElementById('splashPlayIcon'),
+    btnSplashSkip: document.getElementById('btnSplashSkip'),
+    btnSplashEnter: document.getElementById('btnSplashEnter'),
     splashProgressFill: document.getElementById('splashProgressFill'),
+    btnBackToTop: document.getElementById('btnBackToTop'),
     
     // Main Sections
     heroSection: document.getElementById('heroSection'),
@@ -283,30 +284,16 @@
     }
   }
 
-  // ==================== ENTRY VIDEO SPLASH (ALWAYS PLAYS MUSIC) ====================
+  // ==================== ENTRY VIDEO SPLASH (SILENT & FAST STREAMING) ====================
   function initEntryVideoSplash() {
     if (!el.entryVideoSplash || !el.splashVideo) return;
 
-    // Set unmuted with full volume for original audio
-    el.splashVideo.muted = false;
-    el.splashVideo.volume = 1.0;
+    // Permanently muted: guaranteed instant autoplay with zero delay and no audio
+    el.splashVideo.muted = true;
+    el.splashVideo.defaultMuted = true;
+    el.splashVideo.volume = 0;
 
-    const playPromise = el.splashVideo.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        // If mobile browser restricts unmuted autoplay before first touch:
-        el.splashVideo.muted = true;
-        el.splashVideo.play().catch(() => {});
-        const resumeAudioOnTouch = () => {
-          el.splashVideo.muted = false;
-          el.splashVideo.volume = 1.0;
-          window.removeEventListener('click', resumeAudioOnTouch);
-          window.removeEventListener('touchstart', resumeAudioOnTouch);
-        };
-        window.addEventListener('click', resumeAudioOnTouch, { once: true });
-        window.addEventListener('touchstart', resumeAudioOnTouch, { once: true });
-      });
-    }
+    el.splashVideo.play().catch(() => {});
 
     // Update progress bar
     el.splashVideo.addEventListener('timeupdate', () => {
@@ -316,31 +303,49 @@
       }
     });
 
-    // Auto close smoothly into the menu when the 10s video finishes
+    // Auto close smoothly into the menu when video finishes
     el.splashVideo.addEventListener('ended', () => {
       closeSplashVideo();
     });
 
-    // Tap anywhere on the splash to pause / resume or enter
-    if (el.btnSplashCenterTap) {
-      el.btnSplashCenterTap.addEventListener('click', () => {
-        if (el.splashVideo.paused) {
-          el.splashVideo.play();
-          if (el.splashPlayIcon) el.splashPlayIcon.style.display = 'none';
-        } else {
-          el.splashVideo.pause();
-          if (el.splashPlayIcon) el.splashPlayIcon.style.display = 'flex';
-        }
+    // Also auto-advance smoothly after 3.8s if customer is browsing quickly
+    const autoAdvanceTimer = setTimeout(() => {
+      closeSplashVideo();
+    }, 3800);
+
+    // Skip to Menu button
+    if (el.btnSplashSkip) {
+      el.btnSplashSkip.addEventListener('click', (e) => {
+        e.stopPropagation();
+        clearTimeout(autoAdvanceTimer);
+        closeSplashVideo();
       });
     }
+
+    // Explore Full Menu button
+    if (el.btnSplashEnter) {
+      el.btnSplashEnter.addEventListener('click', (e) => {
+        e.stopPropagation();
+        clearTimeout(autoAdvanceTimer);
+        closeSplashVideo();
+      });
+    }
+
+    // Tap anywhere on splash to immediately open menu
+    el.entryVideoSplash.addEventListener('click', () => {
+      clearTimeout(autoAdvanceTimer);
+      closeSplashVideo();
+    });
   }
 
   function closeSplashVideo() {
     if (!el.entryVideoSplash) return;
     el.entryVideoSplash.classList.add('hide');
     setTimeout(() => {
-      if (el.splashVideo) el.splashVideo.pause();
-    }, 650);
+      if (el.splashVideo) {
+        el.splashVideo.pause();
+      }
+    }, 550);
   }
 
   // ==================== RENDERING ====================
@@ -376,7 +381,13 @@
   function setActiveCategory(catId) {
     state.activeCategory = catId;
     el.categoryPillList.querySelectorAll('.category-pill-item').forEach(p => {
-      p.classList.toggle('active', p.dataset.catId === catId);
+      const isCurrent = p.dataset.catId === catId;
+      p.classList.toggle('active', isCurrent);
+      if (isCurrent) {
+        try {
+          p.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        } catch (_) {}
+      }
     });
 
     if (catId === 'all') {
@@ -401,7 +412,7 @@
       html += `
         <div class="popular-card" data-dish-id="${dish.id}">
           <div class="popular-img-wrap">
-            <img src="${dish.image}" alt="${dish.name}" loading="lazy" onerror="this.src='images/default_dish.webp'">
+            <img src="${dish.image}" alt="${dish.name}" loading="lazy" decoding="async" onerror="this.src='images/default_dish.webp'">
             ${dish.badge ? `<span class="popular-badge-pill">${dish.badge}</span>` : ''}
             <span class="diet-mark-icon ${dish.diet}"></span>
           </div>
@@ -516,7 +527,7 @@
         feedHtml += `
           <div class="dish-card" data-dish-id="${dish.id}">
             <div class="dish-media">
-              <img src="${dish.image}" alt="${dish.name}" loading="lazy" onerror="this.src='images/default_dish.webp'">
+              <img src="${dish.image}" alt="${dish.name}" loading="lazy" decoding="async" onerror="this.src='images/default_dish.webp'">
               ${dish.badge ? `<span class="dish-badge-pill">${dish.badge}</span>` : ''}
               <span class="diet-mark-icon ${dish.diet}"></span>
             </div>
@@ -1207,19 +1218,48 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Search Input
+    // Search Input with Debounce for ultra-responsive performance
+    let searchDebounce = null;
     el.searchInput.addEventListener('input', (e) => {
-      state.searchQuery = e.target.value;
-      el.btnClearSearch.style.display = state.searchQuery ? 'block' : 'none';
-      renderMenuFeed();
+      clearTimeout(searchDebounce);
+      const val = e.target.value;
+      el.btnClearSearch.style.display = val ? 'block' : 'none';
+      searchDebounce = setTimeout(() => {
+        state.searchQuery = val;
+        renderMenuFeed();
+      }, 100);
     });
 
     el.btnClearSearch.addEventListener('click', () => {
+      clearTimeout(searchDebounce);
       el.searchInput.value = '';
       state.searchQuery = '';
       el.btnClearSearch.style.display = 'none';
       renderMenuFeed();
     });
+
+    // Floating Back to Top Arrow on the side
+    if (el.btnBackToTop) {
+      el.btnBackToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      let scrollTick = false;
+      window.addEventListener('scroll', () => {
+        if (!scrollTick) {
+          window.requestAnimationFrame(() => {
+            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollY > 280) {
+              el.btnBackToTop.classList.add('visible');
+            } else {
+              el.btnBackToTop.classList.remove('visible');
+            }
+            scrollTick = false;
+          });
+          scrollTick = true;
+        }
+      }, { passive: true });
+    }
 
     el.btnResetFilters.addEventListener('click', () => {
       el.searchInput.value = '';

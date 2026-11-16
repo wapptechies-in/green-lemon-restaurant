@@ -1,0 +1,14 @@
+{
+  "name": "green-lemon-restaurant-menu",
+  "version": "1.0.0",
+  "description": "Mobile-friendly digital menu website for Green Lemon Restaurant",
+  "main": "public/index.html",
+  "scripts": {
+    "update-menu": "python update_menu.py",
+    "start": "python -m http.server 8080 --directory public",
+    "generate-qr": "python generate_qr_and_stand.py"
+  },
+  "keywords": ["digital-menu", "restaurant", "green-lemon", "mobile-menu", "qr-menu"],
+  "author": "Green Lemon Restaurant",
+  "license": "ISC"
+}

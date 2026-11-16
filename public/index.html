@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Green Lemon Restaurant | Digital Menu</title>
+  <meta name="description" content="Explore our authentic Arabian Kuzhimandi, Charcoal Grills, Kerala Specialties, Shakes & Coolers at Green Lemon Restaurant.">
+  <meta name="theme-color" content="#0d351f">
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Config & Data (Supports direct file:// opening and any web server) -->
+  <script src="restaurant.config.js"></script>
+  <script src="menu_data.js"></script>
+</head>
+<body>
+
+  <!-- ==================== ENTRY VIDEO WELCOME SPLASH ==================== -->
+  <aside class="entry-video-splash" id="entryVideoSplash" aria-label="Welcome Video">
+    <video id="splashVideo" class="splash-video-element" playsinline autoplay preload="auto">
+      <source src="video/intro.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+    
+    <div class="splash-overlay-gradient"></div>
+
+    <!-- Top Bar Branding -->
+    <div class="splash-top-bar">
+      <div class="splash-brand-badge">
+        <span class="splash-lemon-icon">🍋</span>
+        <div class="splash-brand-title">
+          <span>GREEN LEMON</span>
+          <small>PAVOORCHATRAM • TENKASI</small>
+        </div>
+      </div>
+      <div class="splash-music-badge">
+        <span class="music-wave-dot"></span>
+        <span>Original Audio</span>
+      </div>
+    </div>
+
+    <!-- Center Ambient Tap to Pause/Play -->
+    <button class="splash-center-tap" id="btnSplashCenterTap" aria-label="Play or Pause Video">
+      <div class="splash-play-icon" id="splashPlayIcon" style="display: none;">
+        <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+      </div>
+    </button>
+
+    <!-- Bottom Progress & Atmosphere Note -->
+    <div class="splash-bottom-bar">
+      <div class="splash-progress-track">
+        <div class="splash-progress-fill" id="splashProgressFill"></div>
+      </div>
+      <div class="splash-atmosphere-text">
+        <span class="splash-tag">✨ SIZZLING AROMAS & AUTHENTIC TASTE</span>
+        <p class="splash-lead">Arabian Kuzhimandi • Charcoal Alfaham • Kerala Delights</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Top App Bar / Header -->
+  <header class="app-header" id="appHeader">
+    <div class="header-inner">
+      <button class="icon-btn" id="btnInfo" aria-label="Restaurant Info">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="brand-center">
+        <div class="brand-emblem">
+          <span class="lemon-icon">🍋</span>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title" id="cfgBrandName">GREEN LEMON</h1>
+          <span class="brand-subtitle" id="cfgBrandSub">RESTAURANT & GRILL</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="btnSearchTrigger" aria-label="Search">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+        <button class="icon-btn tray-trigger-btn" id="btnHeaderTray" aria-label="My Tray">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="tray-badge" id="trayBadgeCount">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search Input Bar -->
+    <div class="search-bar-wrap">
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Search dishes, biryani, alfaham, mojitos..." autocomplete="off">
+        <button class="clear-btn" id="btnClearSearch" aria-label="Clear search" style="display: none;">✕</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="main-content">
+    
+    <!-- Hero Banner with Video & Ambience -->
+    <section class="hero-section" id="heroSection">
+      <div class="hero-card">
+        <div class="hero-bg-overlay"></div>
+        <div class="hero-badge">
+          <span class="pulse-dot"></span>
+          <span>Open Now • Pure Taste</span>
+        </div>
+        <h2 class="hero-headline">GOOD FOOD.<br>GOOD MOOD.<br><span class="accent-text">GREAT MEMORIES.</span></h2>
+        <p class="hero-subtext">Authentic Arabian Kuzhimandi, Charcoal Grills, Kerala Specials & Signature Fruit Coolers.</p>
+        
+        <div class="hero-actions">
+          <button class="hero-btn primary" id="btnHeroOrder">
+            <span>Explore Menu</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+          <button class="hero-btn secondary" id="btnHeroGames">
+            <span>🎮 Table Games</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dietary & Quick Filter Chips -->
+    <section class="filter-strip-section">
+      <div class="filter-chips-container" id="dietFilters">
+        <button class="diet-chip active" data-diet="all">
+          <span class="diet-icon">🍽️</span> All Dishes
+        </button>
+        <button class="diet-chip" data-diet="veg">
+          <span class="diet-indicator veg-dot"></span> Veg Only
+        </button>
+        <button class="diet-chip" data-diet="non-veg">
+          <span class="diet-indicator nonveg-dot"></span> Non-Veg
+        </button>
+        <button class="diet-chip" data-diet="egg">
+          <span class="diet-indicator egg-dot"></span> Contains Egg
+        </button>
+      </div>
+    </section>
+
+    <!-- Sticky Category Nav Pills (Scrollable) -->
+    <nav class="sticky-category-nav" id="categoryNav">
+      <div class="category-scroll-strip" id="categoryPillList">
+        <!-- Rendered dynamically via JS -->
+      </div>
+    </nav>
+
+    <!-- Popular Dishes Section (Inspired by Reference Image) -->
+    <section class="popular-section" id="popularSection">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <h3 class="section-title">Popular Dishes</h3>
+          <span class="section-subtitle">Customer favorites & chef recommendations</span>
+        </div>
+        <button class="view-all-link" id="btnViewAllPopular">View All →</button>
+      </div>
+      <div class="popular-carousel" id="popularCarousel">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- Promo Card: Special Weekend / Signature Deal -->
+    <section class="promo-section" id="promoSection">
+      <div class="promo-card">
+        <div class="promo-content">
+          <span class="promo-tag">WEEKEND SIGNATURE</span>
+          <h4 class="promo-title">AUTHENTIC ARABIAN KUZHIMANDI</h4>
+          <p class="promo-desc">Tender pit-roasted meat, fragrant Mandi rice, garlic sauce & salsa.</p>
+          <button class="promo-btn" id="btnPromoAction">Order For Table →</button>
+        </div>
+        <div class="promo-visual">
+          <img src="images/kuzhimandi-full-chichen.webp" alt="Kuzhimandi" class="promo-dish-img" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <!-- Table Games Interactive Banner (Waiting for food) -->
+    <section class="games-promo-section" id="gamesPromoSection">
+      <div class="games-promo-card" id="bannerOpenGames">
+        <div class="games-card-left">
+          <div class="games-pill-tag">
+            <span class="pulse-dot"></span>
+            <span>WHILE YOU WAIT • TABLE FUN</span>
+          </div>
+          <h4 class="games-headline">Food is cooking! Play Table Puzzles</h4>
+          <p class="games-desc">Pass the time with Memory Match, Foodie Word Scramble & Chef's Lucky Spinner!</p>
+          <button class="games-launch-btn" id="btnLaunchGames">
+            <span>Play Table Games</span>
+            <span class="game-btn-icon">🎮</span>
+          </button>
+        </div>
+        <div class="games-card-visual">
+          <div class="game-avatar-bubble">🎲</div>
+          <div class="game-avatar-bubble puzzle">🧩</div>
+          <div class="game-avatar-bubble wheel">🎯</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Categorized Menu Feed -->
+    <section class="menu-feed" id="menuFeed">
+      <!-- Injected via JS -->
+    </section>
+
+    <!-- Search Results / Empty State -->
+    <div class="search-empty-state" id="searchEmptyState" style="display: none;">
+      <div class="empty-icon">🔍</div>
+      <h4>No dishes found</h4>
+      <p>We couldn't find any dishes matching your search. Try checking your spelling or search for "biryani", "chicken", or "shake".</p>
+      <button class="reset-filter-btn" id="btnResetFilters">View Full Menu</button>
+    </div>
+
+  </main>
+
+  <!-- Sticky Bottom Navigation Bar -->
+  <nav class="bottom-nav-bar" id="bottomNavBar">
+    <button class="nav-item active" id="navBtnMenu" data-target="menu">
+      <div class="nav-icon-wrap">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+      </div>
+      <span>Menu</span>
+    </button>
+
+    <button class="nav-item" id="navBtnGames" data-target="games">
+      <div class="nav-icon-wrap">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="6" width="20" height="12" rx="4"></rect>
+          <line x1="6" y1="12" x2="10" y2="12"></line>
+          <line x1="8" y1="10" x2="8" y2="14"></line>
+          <circle cx="15" cy="11" r="1" fill="currentColor"></circle>
+          <circle cx="18" cy="13" r="1" fill="currentColor"></circle>
+        </svg>
+      </div>
+      <span>Games 🎮</span>
+    </button>
+
+    <button class="nav-item center-cta" id="navBtnTray" data-target="tray">
+      <div class="nav-center-bubble">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <span class="nav-tray-badge" id="bottomTrayBadge">0</span>
+      </div>
+      <span class="center-label">My Tray</span>
+    </button>
+
+    <button class="nav-item" id="navBtnFeedback" data-target="feedback">
+      <div class="nav-icon-wrap">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        </svg>
+      </div>
+      <span>Feedback</span>
+    </button>
+
+    <button class="nav-item" id="navBtnInfo" data-target="info">
+      <div class="nav-icon-wrap">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+      </div>
+      <span>Address</span>
+    </button>
+  </nav>
+
+  <!-- Floating Tray Quick Bar (Appears when items are in tray) -->
+  <aside class="floating-tray-bar" id="floatingTrayBar" style="display: none;">
+    <div class="floating-tray-inner">
+      <div class="tray-summary-left">
+        <span class="tray-count-pill" id="ftbCount">0 Items</span>
+        <span class="tray-total-price" id="ftbPrice">₹0</span>
+      </div>
+      <button class="tray-action-btn" id="btnOpenTrayFromFloat">
+        <span>View Table Tray</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==================== MODALS & DRAWERS ==================== -->
+
+  <!-- 1. Dish Details Modal -->
+  <div class="modal-overlay" id="dishModalOverlay">
+    <div class="modal-card dish-detail-card" id="dishModalContent">
+      <button class="modal-close-btn" id="btnCloseDishModal" aria-label="Close">✕</button>
+      <div class="modal-dish-media">
+        <img src="" alt="" id="modalDishImg" class="modal-dish-img">
+        <span class="modal-diet-tag" id="modalDishDiet"></span>
+        <span class="modal-badge-tag" id="modalDishBadge"></span>
+      </div>
+      <div class="modal-dish-body">
+        <div class="modal-header-row">
+          <h3 class="modal-dish-title" id="modalDishTitle"></h3>
+          <span class="modal-dish-price" id="modalDishPrice"></span>
+        </div>
+        <p class="modal-dish-raw" id="modalDishRawName"></p>
+        <p class="modal-dish-desc" id="modalDishDesc"></p>
+        
+        <div class="modal-dish-meta">
+          <div class="meta-tag">
+            <span class="meta-label">Category:</span>
+            <span class="meta-val" id="modalDishCategory"></span>
+          </div>
+          <div class="meta-tag">
+            <span class="meta-label">Spice Level:</span>
+            <span class="meta-val" id="modalDishSpice"></span>
+          </div>
+        </div>
+
+        <div class="modal-action-row">
+          <div class="qty-stepper" id="modalQtyStepper">
+            <button class="qty-btn" id="btnModalQtyMinus">-</button>
+            <span class="qty-val" id="modalQtyVal">1</span>
+            <button class="qty-btn" id="btnModalQtyPlus">+</button>
+          </div>
+          <button class="add-to-tray-btn" id="btnModalAddToTray">
+            Add to Tray • <span id="modalAddBtnPrice">₹0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Table Tray Slide-up Drawer -->
+  <div class="drawer-overlay" id="trayDrawerOverlay">
+    <div class="drawer-panel tray-drawer">
+      <div class="drawer-header">
+        <div class="drawer-title-group">
+          <h3>Your Table Tray</h3>
+          <span class="drawer-sub" id="trayItemTotalText">0 items selected</span>
+        </div>
+        <button class="drawer-close-btn" id="btnCloseTrayDrawer">✕</button>
+      </div>
+
+      <div class="tray-items-list" id="trayItemsList">
+        <!-- Populated via JS -->
+      </div>
+
+      <div class="tray-footer">
+        <div class="tray-bill-breakdown">
+          <div class="bill-row">
+            <span>Subtotal</span>
+            <span id="traySubtotal">₹0</span>
+          </div>
+          <div class="bill-row total-highlight">
+            <span>Estimated Total</span>
+            <span id="trayGrandTotal">₹0</span>
+          </div>
+        </div>
+
+        <div class="tray-buttons">
+          <button class="tray-btn-primary" id="btnShowWaiter">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            Show Order to Waiter
+          </button>
+          <button class="tray-btn-secondary" id="btnClearTray">Clear Tray</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Show Order Summary to Waiter Modal -->
+  <div class="modal-overlay" id="waiterModalOverlay">
+    <div class="modal-card waiter-card">
+      <button class="modal-close-btn" id="btnCloseWaiterModal">✕</button>
+      <div class="waiter-header">
+        <span class="waiter-badge">Dine-in Order Slip</span>
+        <h3 id="waiterRestaurantName">Green Lemon Restaurant</h3>
+        <p class="waiter-time" id="waiterOrderTime"></p>
+      </div>
+      <div class="waiter-table-input-wrap">
+        <label for="tableNoInput">Enter Your Table Number:</label>
+        <input type="text" id="tableNoInput" placeholder="e.g. Table 4" value="Table 1">
+      </div>
+      <div class="waiter-items-slip" id="waiterItemsSlip">
+        <!-- Rendered list of items for waiter -->
+      </div>
+      <div class="waiter-total-slip">
+        <span>Estimated Total:</span>
+        <strong id="waiterTotalAmount">₹0</strong>
+      </div>
+      <div class="waiter-notice">
+        👉 Please show this screen to your server or waiter to confirm and place your order.
+      </div>
+      <button class="whatsapp-share-btn" id="btnShareWhatsApp">
+        <span>Send Order via WhatsApp</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 4. Customer Feedback Page / Modal -->
+  <div class="modal-overlay" id="feedbackModalOverlay">
+    <div class="modal-card feedback-card">
+      <button class="modal-close-btn" id="btnCloseFeedbackModal">✕</button>
+      
+      <div class="feedback-intro">
+        <div class="feedback-leaf">🍋</div>
+        <h3>We Value Your Feedback!</h3>
+        <p>Help us make your dining experience at Green Lemon Restaurant truly exceptional.</p>
+      </div>
+
+      <form id="feedbackForm" class="feedback-form">
+        <!-- Overall Rating -->
+        <div class="rating-group">
+          <label class="rating-label">Overall Experience</label>
+          <div class="star-rating" data-name="overallRating" id="starOverall">
+            <button type="button" class="star-btn" data-val="1">★</button>
+            <button type="button" class="star-btn" data-val="2">★</button>
+            <button type="button" class="star-btn" data-val="3">★</button>
+            <button type="button" class="star-btn" data-val="4">★</button>
+            <button type="button" class="star-btn active" data-val="5">★</button>
+          </div>
+        </div>
+
+        <!-- Food Quality Rating -->
+        <div class="rating-group">
+          <label class="rating-label">Food Quality & Taste</label>
+          <div class="star-rating" data-name="foodRating" id="starFood">
+            <button type="button" class="star-btn" data-val="1">★</button>
+            <button type="button" class="star-btn" data-val="2">★</button>
+            <button type="button" class="star-btn" data-val="3">★</button>
+            <button type="button" class="star-btn" data-val="4">★</button>
+            <button type="button" class="star-btn active" data-val="5">★</button>
+          </div>
+        </div>
+
+        <!-- Service & Friendliness -->
+        <div class="rating-group">
+          <label class="rating-label">Service & Cleanliness</label>
+          <div class="star-rating" data-name="serviceRating" id="starService">
+            <button type="button" class="star-btn" data-val="1">★</button>
+            <button type="button" class="star-btn" data-val="2">★</button>
+            <button type="button" class="star-btn" data-val="3">★</button>
+            <button type="button" class="star-btn" data-val="4">★</button>
+            <button type="button" class="star-btn active" data-val="5">★</button>
+          </div>
+        </div>
+
+        <!-- Favorite Dish -->
+        <div class="form-group">
+          <label for="fbFavoriteDish">Your Favorite Dish Today:</label>
+          <input type="text" id="fbFavoriteDish" placeholder="e.g. Chicken Kuzhimandi, Alfaham Peri Peri">
+        </div>
+
+        <!-- Comments -->
+        <div class="form-group">
+          <label for="fbComments">Suggestions or Comments:</label>
+          <textarea id="fbComments" rows="3" placeholder="Tell us what you loved or how we can improve..."></textarea>
+        </div>
+
+        <!-- Customer Info -->
+        <div class="form-row">
+          <div class="form-group col-half">
+            <label for="fbCustomerName">Name (Optional):</label>
+            <input type="text" id="fbCustomerName" placeholder="Your Name">
+          </div>
+          <div class="form-group col-half">
+            <label for="fbTableNo">Table No:</label>
+            <input type="text" id="fbTableNo" placeholder="e.g. 5">
+          </div>
+        </div>
+
+        <button type="submit" class="submit-feedback-btn" id="btnSubmitFeedback">
+          <span>Submit My Review</span>
+        </button>
+      </form>
+
+      <!-- Feedback Success View -->
+      <div class="feedback-success-state" id="feedbackSuccessState" style="display: none;">
+        <div class="success-checkmark">🎉</div>
+        <h4>Thank You So Much!</h4>
+        <p>Your feedback has been recorded. We hope to see you again soon at Green Lemon Restaurant!</p>
+        <button class="hero-btn primary" id="btnFeedbackDone">Back to Menu</button>
+      </div>
+
+      <!-- Owner Feedback Log Toggle -->
+      <div class="owner-feedback-link-wrap">
+        <button type="button" class="text-link-btn" id="btnToggleOwnerFeedback">Restaurant Staff: View Feedback Logs</button>
+      </div>
+
+      <!-- Owner Feedback Dashboard Drawer -->
+      <div class="owner-feedback-panel" id="ownerFeedbackPanel" style="display: none;">
+        <div class="owner-header">
+          <h5>Collected Customer Reviews (<span id="feedbackCount">0</span>)</h5>
+          <button type="button" class="clear-fb-btn" id="btnClearFeedbackLogs">Clear</button>
+        </div>
+        <div class="feedback-list-scroll" id="feedbackListContainer">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Restaurant Info & Contact Modal -->
+  <div class="modal-overlay" id="infoModalOverlay">
+    <div class="modal-card info-card">
+      <button class="modal-close-btn" id="btnCloseInfoModal">✕</button>
+      <div class="info-hero">
+        <span class="info-logo-badge">🍋</span>
+        <h3 id="infoRestName">Green Lemon Restaurant</h3>
+        <p id="infoRestTagline" class="info-tagline">Good Food • Good Mood • Great Memories</p>
+      </div>
+
+      <div class="info-details-list">
+        <div class="info-item">
+          <div class="info-icon">📍</div>
+          <div class="info-text">
+            <strong>Address</strong>
+            <p id="infoAddress">KTC Nagar, Pavoorchatram, Tenkasi, Tamil Nadu - 627808</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">🕒</div>
+          <div class="info-text">
+            <strong>Operating Hours</strong>
+            <p id="infoHours">11:30 AM - 11:30 PM (Mon - Sun)</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">📞</div>
+          <div class="info-text">
+            <strong>Phone & Table Booking</strong>
+            <p id="infoPhone">+91 96333 38944</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-actions">
+        <a href="tel:+919633338944" class="info-action-btn call" id="linkCall">
+          📞 Call Restaurant (+91 96333 38944)
+        </a>
+        <a href="https://wa.me/919633338944" class="info-action-btn whatsapp" id="linkWhatsApp" target="_blank">
+          💬 WhatsApp Message
+        </a>
+        <a href="https://maps.google.com/?q=Green+Lemon+Restaurant+Pavoorchatram+Tenkasi" class="info-action-btn maps" id="linkMaps" target="_blank">
+          🗺️ Get Directions (Pavoorchatram, Tenkasi)
+        </a>
+      </div>
+
+      <div class="info-footer">
+        <p>100% Halal Food • Family Dining • Takeaway Available</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Video Player Modal -->
+  <div class="modal-overlay" id="videoModalOverlay">
+    <div class="modal-card video-card">
+      <button class="modal-close-btn" id="btnCloseVideoModal">✕</button>
+      <div class="video-container">
+        <video id="restaurantVideo" controls playsinline preload="metadata">
+          <source src="video/intro.mp4" type="video/mp4">
+          Your browser does not support video tag.
+        </video>
+      </div>
+      <div class="video-meta">
+        <h4>Green Lemon Experience</h4>
+        <p>Sizzling aromas, vibrant Arabian spices & refreshing moments.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Table Fun & Puzzle Games Modal -->
+  <div class="modal-overlay" id="gamesModalOverlay">
+    <div class="modal-card games-card">
+      <button class="modal-close-btn" id="btnCloseGamesModal">✕</button>
+      
+      <div class="games-header">
+        <span class="games-badge-pill">🎮 TABLE PLAY ZONE</span>
+        <h3>Food is on the Way!</h3>
+        <p>Challenge your tablemates with fun mini-puzzles while your delicious food is cooked fresh.</p>
+      </div>
+
+      <!-- Game Tabs -->
+      <div class="games-tabs-bar">
+        <button class="game-tab-btn active" data-game="match">
+          <span>🃏</span> Pairs Match
+        </button>
+        <button class="game-tab-btn" data-game="scramble">
+          <span>🧩</span> Word Scramble
+        </button>
+        <button class="game-tab-btn" data-game="spinner">
+          <span>🎯</span> Chef's Wheel
+        </button>
+      </div>
+
+      <!-- GAME 1: Pairs Match -->
+      <div class="game-view active" id="gameViewMatch">
+        <div class="game-stats-bar">
+          <div class="stat-pill">Moves: <strong id="matchMovesCount">0</strong></div>
+          <div class="stat-pill">Matched: <strong id="matchPairsCount">0 / 6</strong></div>
+          <button class="game-reset-btn" id="btnRestartMatch">🔄 Restart</button>
+        </div>
+        
+        <div class="memory-grid" id="memoryGrid">
+          <!-- 12 cards injected via JS -->
+        </div>
+
+        <div class="game-win-banner" id="matchWinBanner" style="display: none;">
+          <div class="win-icon">🎉</div>
+          <h4>Brilliant Memory!</h4>
+          <p id="matchWinMsg">You matched all delicious dishes in 8 moves! Your food is cooking with authentic spices in the kitchen.</p>
+          <button class="game-launch-btn" id="btnPlayMatchAgain">Play Again 🔄</button>
+        </div>
+      </div>
+
+      <!-- GAME 2: Word Scramble -->
+      <div class="game-view" id="gameViewScramble" style="display: none;">
+        <div class="scramble-card">
+          <span class="scramble-round" id="scrambleRoundText">Dish 1 of 5</span>
+          <div class="scramble-clue-box">
+            <span class="clue-tag">💡 CHEF'S CLUE:</span>
+            <p id="scrambleClueText">Authentic Arabian slow-pit roasted spiced long-grain rice with chicken.</p>
+          </div>
+          
+          <div class="scramble-tiles-box" id="scrambleTilesBox">
+            <!-- Scrambled letter tiles -->
+          </div>
+
+          <div class="scramble-answer-box" id="scrambleAnswerBox">
+            <!-- Selected letters -->
+          </div>
+
+          <div class="scramble-actions">
+            <button class="scramble-btn secondary" id="btnClearScramble">Clear</button>
+            <button class="scramble-btn primary" id="btnSubmitScramble">Check Answer ✨</button>
+            <button class="scramble-btn next" id="btnNextScramble" style="display: none;">Next Dish →</button>
+          </div>
+          <div class="scramble-feedback" id="scrambleFeedback"></div>
+        </div>
+      </div>
+
+      <!-- GAME 3: Chef's Lucky Spinner -->
+      <div class="game-view" id="gameViewSpinner" style="display: none;">
+        <div class="spinner-game-wrap">
+          <p class="spinner-instruction">Can't decide what to order? Spin the Chef's lucky wheel and let delicious fate decide!</p>
+          <div class="spinner-wheel-container">
+            <div class="spinner-wheel" id="spinnerWheel">
+              <div class="wheel-pointer">▼</div>
+              <div class="wheel-center-cap">🍋</div>
+              <div class="wheel-dish-name" id="spinnerDishDisplay">Tap Spin!</div>
+            </div>
+          </div>
+          <button class="spin-trigger-btn" id="btnSpinWheel">
+            <span>SPIN THE WHEEL 🎯</span>
+          </button>
+          <div class="spinner-result-card" id="spinnerResultCard" style="display: none;">
+            <div class="result-left">
+              <img src="images/kuzhimandi-qtr-chichen.webp" id="spinnerResultImg" alt="Result dish" class="spinner-result-thumb">
+              <div>
+                <strong id="spinnerResultTitle">Kuzhimandi</strong>
+                <span id="spinnerResultPrice">₹210</span>
+              </div>
+            </div>
+            <button class="card-add-btn" id="btnSpinnerAddTray">+ Add to Tray</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

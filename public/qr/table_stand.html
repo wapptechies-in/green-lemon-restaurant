@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Green Lemon Restaurant - Printable Table Stand</title>
+  <style>
+    @page {
+      size: A5 portrait;
+      margin: 10mm;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background: #f0f3f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .stand-card {
+      background: #ffffff;
+      width: 148mm;
+      min-height: 210mm;
+      padding: 16mm 14mm;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+      border: 3px solid #0D351F;
+      position: relative;
+    }
+    .stand-header {
+      margin-bottom: 8px;
+    }
+    .brand-icon {
+      font-size: 32px;
+      margin-bottom: 6px;
+    }
+    .brand-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0D351F;
+      letter-spacing: 1px;
+    }
+    .brand-sub {
+      font-size: 10px;
+      font-weight: 700;
+      color: #D97706;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .cta-banner {
+      background: #0D351F;
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: 30px;
+      margin: 12px 0 8px;
+    }
+    .cta-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #F4BE18;
+      letter-spacing: 0.5px;
+    }
+    .cta-hint {
+      font-size: 9.5px;
+      color: #ffffff;
+      opacity: 0.9;
+    }
+    .qr-container {
+      background: #ffffff;
+      padding: 10px;
+      border-radius: 16px;
+      border: 2px solid #E5EAE5;
+      box-shadow: 0 4px 14px rgba(13,53,31,0.08);
+      margin: 10px 0;
+    }
+    .qr-container img {
+      width: 78mm;
+      height: 78mm;
+      display: block;
+    }
+    .features-pill {
+      font-size: 9px;
+      font-weight: 700;
+      color: #0D351F;
+      background: #F1F4F1;
+      padding: 5px 12px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .stand-footer {
+      border-top: 1px dashed #D1D5DB;
+      padding-top: 8px;
+      width: 100%;
+      font-size: 8.5px;
+      color: #4B5563;
+      line-height: 1.4;
+    }
+    .print-bar {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: #0D351F;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    @media print {
+      body {
+        background: transparent;
+        padding: 0;
+      }
+      .print-bar {
+        display: none;
+      }
+      .stand-card {
+        box-shadow: none;
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-bar" onclick="window.print()">🖨️ Print Table Stand (Ctrl + P)</button>
+
+  <div class="stand-card">
+    <div class="stand-header">
+      <div class="brand-icon">🍋</div>
+      <h1 class="brand-title">GREEN LEMON RESTAURANT</h1>
+      <div class="brand-sub">Authentic Arabian • Charcoal Grills • Kerala Specials</div>
+    </div>
+
+    <div class="cta-banner">
+      <div class="cta-title">SCAN TO VIEW OUR MENU</div>
+      <div class="cta-hint">Point your phone camera here • No app needed</div>
+    </div>
+
+    <div class="qr-container">
+      <img src="green_lemon_qr.png" alt="Scan QR Code for Menu">
+    </div>
+
+    <div class="features-pill">
+      ✨ 232 Delicious Dishes &nbsp;•&nbsp; 📸 Live Photos &nbsp;•&nbsp; 🛍️ Table Order Builder
+    </div>
+
+    <div class="stand-footer">
+      <strong>Branch:</strong> Pavoorchatram, Tenkasi &nbsp;•&nbsp; <strong>Service & Orders:</strong> +91 96333 38944<br/>
+      KTC Nagar, Pavoorchatram, Tenkasi, Tamil Nadu - 627808<br/>
+      <span style="color: #9CA3AF; font-size: 7.5px;">https://greenlemonrestaurant.netlify.app</span>
+    </div>
+  </div>
+
+</body>
+</html>

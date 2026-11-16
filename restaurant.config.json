@@ -1,0 +1,19 @@
+{
+  "name": "Green Lemon Restaurant",
+  "branch": "Pavoorchatram",
+  "tagline": "Good Food • Good Mood • Great Memories",
+  "shortDesc": "Authentic Arabian Kuzhimandi, Charcoal Grills, Kerala Delicacies & Refreshing Coolers",
+  "phone": "+91 96333 38944",
+  "phoneFormatted": "+91 96333 38944",
+  "whatsapp": "+919633338944",
+  "address": "KTC Nagar, Pavoorchatram, Tenkasi, Tamil Nadu - 627808",
+  "operatingHours": "11:30 AM - 11:30 PM (Mon - Sun)",
+  "googleMapsUrl": "https://maps.google.com/?q=Green+Lemon+Restaurant+Pavoorchatram+Tenkasi",
+  "websiteUrl": "https://greenlemonrestaurant.netlify.app",
+  "currency": "₹",
+  "currencyCode": "INR",
+  "theme": {
+    "primaryGreen": "#0d351f",
+    "lemonGold": "#eab308"
+  }
+}

@@ -100,8 +100,6 @@
     // Entry Video Splash
     entryVideoSplash: document.getElementById('entryVideoSplash'),
     splashVideo: document.getElementById('splashVideo'),
-    btnSplashSkip: document.getElementById('btnSplashSkip'),
-    btnSplashEnter: document.getElementById('btnSplashEnter'),
     splashProgressFill: document.getElementById('splashProgressFill'),
     btnBackToTop: document.getElementById('btnBackToTop'),
     
@@ -284,7 +282,7 @@
     }
   }
 
-  // ==================== ENTRY VIDEO SPLASH (SILENT & FAST STREAMING) ====================
+  // ==================== ENTRY VIDEO SPLASH (PLAYS COMPLETELY THEN ENTERS MENU) ====================
   function initEntryVideoSplash() {
     if (!el.entryVideoSplash || !el.splashVideo) return;
 
@@ -292,49 +290,33 @@
     el.splashVideo.muted = true;
     el.splashVideo.defaultMuted = true;
     el.splashVideo.volume = 0;
+    el.splashVideo.loop = false;
+
+    let hasCompleted = false;
+    const triggerMenuTransition = () => {
+      if (hasCompleted) return;
+      hasCompleted = true;
+      closeSplashVideo();
+    };
 
     el.splashVideo.play().catch(() => {});
 
-    // Update progress bar
+    // Update progress bar and detect completion
     el.splashVideo.addEventListener('timeupdate', () => {
       if (el.splashVideo.duration) {
         const pct = (el.splashVideo.currentTime / el.splashVideo.duration) * 100;
         if (el.splashProgressFill) el.splashProgressFill.style.width = pct + '%';
+
+        // When video reaches the end, transition to menu
+        if (el.splashVideo.currentTime >= el.splashVideo.duration - 0.2) {
+          triggerMenuTransition();
+        }
       }
     });
 
-    // Auto close smoothly into the menu when video finishes
+    // Auto close smoothly into the menu when video finishes completely
     el.splashVideo.addEventListener('ended', () => {
-      closeSplashVideo();
-    });
-
-    // Also auto-advance smoothly after 3.8s if customer is browsing quickly
-    const autoAdvanceTimer = setTimeout(() => {
-      closeSplashVideo();
-    }, 3800);
-
-    // Skip to Menu button
-    if (el.btnSplashSkip) {
-      el.btnSplashSkip.addEventListener('click', (e) => {
-        e.stopPropagation();
-        clearTimeout(autoAdvanceTimer);
-        closeSplashVideo();
-      });
-    }
-
-    // Explore Full Menu button
-    if (el.btnSplashEnter) {
-      el.btnSplashEnter.addEventListener('click', (e) => {
-        e.stopPropagation();
-        clearTimeout(autoAdvanceTimer);
-        closeSplashVideo();
-      });
-    }
-
-    // Tap anywhere on splash to immediately open menu
-    el.entryVideoSplash.addEventListener('click', () => {
-      clearTimeout(autoAdvanceTimer);
-      closeSplashVideo();
+      triggerMenuTransition();
     });
   }
 
@@ -383,10 +365,11 @@
     el.categoryPillList.querySelectorAll('.category-pill-item').forEach(p => {
       const isCurrent = p.dataset.catId === catId;
       p.classList.toggle('active', isCurrent);
-      if (isCurrent) {
-        try {
-          p.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-        } catch (_) {}
+      if (isCurrent && el.categoryPillList) {
+        // Smoothly center the active pill inside the horizontal category strip without touching window scroll
+        const strip = el.categoryPillList;
+        const targetLeft = p.offsetLeft - (strip.clientWidth / 2) + (p.offsetWidth / 2);
+        strip.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' });
       }
     });
 
@@ -396,8 +379,14 @@
     } else {
       const targetSec = document.getElementById(`cat-block-${catId}`);
       if (targetSec) {
-        targetSec.style.display = 'block';
-        targetSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.querySelectorAll('.category-block').forEach(b => b.style.display = 'block');
+        // Accurate header-offset scroll that eliminates jitter and glitching
+        const headerOffset = 165;
+        const targetY = targetSec.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: Math.max(0, targetY),
+          behavior: 'smooth'
+        });
       }
     }
   }
@@ -1355,7 +1344,9 @@
 
     // Waiter Slip Actions
     el.btnCloseWaiterModal.addEventListener('click', closeWaiterSlipModal);
-    el.btnShareWhatsApp.addEventListener('click', shareOrderOnWhatsApp);
+    if (el.btnShareWhatsApp) {
+      el.btnShareWhatsApp.addEventListener('click', shareOrderOnWhatsApp);
+    }
 
     // Feedback Actions
     el.btnCloseFeedbackModal.addEventListener('click', closeFeedbackModal);

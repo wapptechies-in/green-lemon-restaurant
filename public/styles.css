@@ -188,63 +188,13 @@ input, textarea, select {
   color: var(--lemon-gold);
 }
 
-.splash-skip-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(7, 32, 19, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: var(--lemon-gold);
-  padding: 8px 16px;
-  border-radius: var(--radius-pill);
-  font-family: var(--font-heading);
-  font-size: 0.85rem;
-  font-weight: 700;
-  border: 1px solid rgba(244, 190, 24, 0.45);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
-  cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
-}
-
-.splash-skip-pill:hover,
-.splash-skip-pill:active {
-  background: var(--lemon-gold);
-  color: #072013;
-  transform: scale(1.05);
-}
-
 .splash-bottom-bar {
   position: relative;
   z-index: 3;
-  padding: 16px 20px 32px;
+  padding: 16px 20px 36px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-}
-
-.splash-enter-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  background: linear-gradient(135deg, var(--lemon-gold) 0%, #e0aa1b 100%);
-  color: #072013;
-  font-family: var(--font-heading);
-  font-weight: 800;
-  font-size: 1.05rem;
-  padding: 15px 24px;
-  border-radius: var(--radius-pill);
-  box-shadow: 0 8px 24px rgba(244, 190, 24, 0.45);
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.splash-enter-btn:hover,
-.splash-enter-btn:active {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(244, 190, 24, 0.6);
 }
 
 .splash-progress-track {
@@ -1001,8 +951,6 @@ input, textarea, select {
 .category-block {
   margin-bottom: 28px;
   scroll-margin-top: 170px;
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 320px;
 }
 
 .cat-header {
@@ -1066,8 +1014,6 @@ input, textarea, select {
   position: relative;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   cursor: pointer;
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 115px;
 }
 
 .dish-card:active {
@@ -1490,12 +1436,12 @@ input, textarea, select {
   overflow-y: auto;
   position: relative;
   box-shadow: var(--shadow-lg);
-  transform: translateY(20px) scale(0.97);
-  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: translateY(16px);
+  transition: transform 0.22s ease-out, opacity 0.2s ease;
 }
 
 .modal-overlay.active .modal-card {
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
 }
 
 .modal-close-btn {
